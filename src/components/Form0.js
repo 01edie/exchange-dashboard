@@ -2,15 +2,12 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-
 import { Checkbox } from "primereact/checkbox";
 import { classNames } from "primereact/utils";
 import "./user.css";
 import { Card } from "primereact/card";
 
 export const Form0 = ({ setSubmitted, setFormData }) => {
-  // const [showMessage, setShowMessage] = useState(false);
-
   const defaultValues = {
     name: "",
     email: "",
@@ -26,7 +23,6 @@ export const Form0 = ({ setSubmitted, setFormData }) => {
 
   const onSubmit = (data) => {
     setFormData(data);
-    // console.log(data);
     setSubmitted(true);
     reset();
   };
@@ -38,7 +34,7 @@ export const Form0 = ({ setSubmitted, setFormData }) => {
   };
 
   return (
-    <Card className="shadow-4 bg-indigo-200  ml-2 mt-2">
+    <Card className="shadow-4 bg-indigo-200 mt-2">
       <div className="form-demo">
         <div className="flex justify-content-center">
           <div className="card">

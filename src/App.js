@@ -8,15 +8,24 @@ import UserPallete from "./components/UserPallete";
 const App = () => {
   const [submitted, setSubmitted] = React.useState(false);
   const [formData, setFormData] = React.useState({});
+  const sessionData = sessionStorage.getItem("exchangeData");
+  const [sessionName, setSessionName] = React.useState(
+    sessionStorage.getItem("name")
+  );
   return (
     <>
       <Navbar></Navbar>
 
       <div className="grid w-full flex flex-wrap justify-content-center m-0">
         <div className="col-4 form-section">
-          {submitted ? (
-            <UserPallete formData={formData} />
-          ) : ( 
+          {submitted || sessionName ? (
+            <UserPallete
+              formData={formData}
+              sessionName={sessionName}
+              setSubmitted={setSubmitted}
+              setSessionName={setSessionName}
+            />
+          ) : (
             <Form0
               setSubmitted={setSubmitted}
               setFormData={setFormData}
@@ -24,7 +33,11 @@ const App = () => {
           )}
         </div>
         <div className="col-8 h-full feature-section">
-          {submitted ? <Exchange></Exchange> : <Features></Features>}
+          {submitted || sessionName ? (
+            <Exchange formData={formData} sessionData={sessionData}></Exchange>
+          ) : (
+            <Features></Features>
+          )}
         </div>
       </div>
     </>

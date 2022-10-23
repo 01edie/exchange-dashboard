@@ -1,3 +1,4 @@
+// for historical data for AreaChart without present data
 export const data = [{
     date: '01/01/2019',
     INR: 69.740272,

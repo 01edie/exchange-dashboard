@@ -6,47 +6,56 @@ import Areachart, { Areachart2 } from "./Areachart";
 import { data } from "./Data";
 import Error from "./Error";
 
-const Exchange = () => {
+const Exchange = ({ formData, sessionData }) => {
   const [state, setState] = React.useState({
     loading: false,
     exchangeData: {},
     errorMessage: null,
   });
 
-
-
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        setState((s)=>{
+        setState((s) => {
           return {
-          ...s,
-          loading: true,
-          }
+            ...s,
+            loading: true,
+          };
         });
         const response = await ExchangeService.getExchangeData();
         const result = response.data.rates;
-        setState((s)=>{
+        setState((s) => {
           return {
             ...s,
-          loading: false,
-          exchangeData: result,
-          }
+            loading: false,
+            exchangeData: result,
+          };
         });
+        sessionStorage.setItem("exchangeData", JSON.stringify(result));
+        sessionStorage.setItem("name", formData.name);
       } catch (error) {
         console.log(error);
-        setState((s)=>{
+        setState((s) => {
           return {
             ...s,
-          errorMessage: error.message,
-          }
+            errorMessage: error.message,
+          };
         });
       }
     };
-  fetchData();
-  },[]);
+    if (sessionData) {
+      setState((s) => {
+        return {
+          ...s,
+          exchangeData: JSON.parse(sessionData),
+        };
+      });
+    } else {
+      fetchData();
+    }
+  }, [formData, sessionData]);
   let selectedCountries, currentDate, historicalData;
-  
+
   if (state.exchangeData.INR !== undefined) {
     selectedCountries = [
       { name: "INR", value: state.exchangeData.INR.toFixed(3) },
@@ -60,13 +69,13 @@ const Exchange = () => {
     currentDate = new Date();
 
     historicalData = [
-    ...data,
-    {
-      date: currentDate.toLocaleDateString(),
-      INR: state.exchangeData.INR.toFixed(5),
-      JPY: state.exchangeData.JPY.toFixed(5),
-    },
-  ];
+      ...data,
+      {
+        date: currentDate.toLocaleDateString(),
+        INR: state.exchangeData.INR.toFixed(5),
+        JPY: state.exchangeData.JPY.toFixed(5),
+      },
+    ];
   }
 
   const allData = Object.entries(state.exchangeData);
@@ -81,7 +90,6 @@ const Exchange = () => {
       value: item[1].toFixed(3),
     };
   });
-
 
   const bottom5 = sortedCurrencies
     .slice(-5)
@@ -102,13 +110,12 @@ const Exchange = () => {
       bottomCurrencyValue: tmp.value,
     };
   });
-  
 
   if (state.loading) {
-    return <Loading ></Loading>;
+    return <Loading></Loading>;
   }
-  if(state.errorMessage!==null){
-    return <Error errorMessage={state.errorMessage}></Error>
+  if (state.errorMessage !== null) {
+    return <Error errorMessage={state.errorMessage}></Error>;
   }
   return (
     <div className="grid w-full mt-2 bg-black-alpha-10 p-3 justify-content-center">
