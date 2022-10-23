@@ -1,0 +1,27 @@
+/* .form-demo .card {
+    min-width: 450px;
+} */
+.form-demo .card form {
+    margin-top: 1rem;
+}
+.form-demo .card .field {
+    margin-bottom: 1.5rem;
+}
+.form-demo .card .field span input:focus + label{
+    font-size: 0.75rem;
+    background-color: #3f51b5;
+    color: white;
+    border-radius: 2px 2px 6px 2px;
+    padding: 5px;
+}
+@media screen and (max-width: 960px) {
+    .form-demo .card {
+        width: 80%;
+    }
+}
+@media screen and (max-width: 640px) {
+    .form-demo .card {
+        width: 100%;
+        min-width: 0;
+    }
+}

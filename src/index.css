@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap");
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 16px;
+}
+body {
+  font-family: "Ubuntu", sans-serif;
+  width: 100vw;
+}
+
+.image-feature{
+  width: 70%;
+  height: 40%;
+  border-radius: 1rem;
+  opacity: 0.65;
+}
+.form-section{
+  min-width: 350px;
+}
+.feature-section{
+  min-width: 350px;
+}
+@media screen and (max-width:976px) {
+
+ html{
+  font-size: 12px;
+ }
+ .pi-bars{
+  visibility: hidden;
+}
+}
+@media screen and (max-width:676px) {
+  .recharts-wrapper{
+    width: 300px !important;
+  }
+ .recharts-surface{
+  width: 300px;
+ }
+}
