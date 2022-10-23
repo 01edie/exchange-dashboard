@@ -6,7 +6,6 @@ import {
   YAxis,
   Tooltip,
   CartesianGrid,
-  ResponsiveContainer
 } from "recharts";
 
 const Barchart = ({ chartData, color, title }) => {

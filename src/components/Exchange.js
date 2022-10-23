@@ -13,30 +13,37 @@ const Exchange = () => {
     errorMessage: null,
   });
 
-  const fetchData = async () => {
-    try {
-      setState({
-        ...state,
-        loading: true,
-      });
-      const response = await ExchangeService.getExchangeData();
-      const result = response.data.rates;
-      setState({
-        ...state,
-        loading: false,
-        exchangeData: result,
-      });
-    } catch (error) {
-      console.log(error);
-      setState({
-        ...state,
-        errorMessage: error.message,
-      });
-    }
-  };
+
 
   React.useEffect(() => {
-    fetchData();
+    const fetchData = async () => {
+      try {
+        setState((s)=>{
+          return {
+          ...s,
+          loading: true,
+          }
+        });
+        const response = await ExchangeService.getExchangeData();
+        const result = response.data.rates;
+        setState((s)=>{
+          return {
+            ...s,
+          loading: false,
+          exchangeData: result,
+          }
+        });
+      } catch (error) {
+        console.log(error);
+        setState((s)=>{
+          return {
+            ...s,
+          errorMessage: error.message,
+          }
+        });
+      }
+    };
+  fetchData();
   },[]);
   let selectedCountries, currentDate, historicalData;
   
