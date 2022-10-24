@@ -14,6 +14,9 @@ const Exchange = ({ formData, sessionData }) => {
   });
 
   React.useEffect(() => {
+
+    //fetching data every n minutes
+    
     const fetchData = async () => {
       try {
         setState((s) => {
@@ -54,6 +57,46 @@ const Exchange = ({ formData, sessionData }) => {
       fetchData();
     }
   }, [formData, sessionData]);
+
+  React.useEffect(() => {
+    const timerFetch = setInterval(() => {
+      const fetchData = async () => {
+        try {
+          setState((s) => {
+            return {
+              ...s,
+              loading: true,
+            };
+          });
+          const response = await ExchangeService.getExchangeData();
+          const result = response.data.rates;
+          setState((s) => {
+            return {
+              ...s,
+              loading: false,
+              exchangeData: result,
+            };
+          });
+          sessionStorage.setItem("exchangeData", JSON.stringify(result));
+          
+        } catch (error) {
+          console.log(error);
+          setState((s) => {
+            return {
+              ...s,
+              errorMessage: error.message,
+            };
+          });
+        }
+      };
+      fetchData()
+    }, 60000);
+    return () => {
+      clearInterval(timerFetch);
+    };
+  },[])
+
+
   let selectedCountries, currentDate, historicalData;
 
   if (state.exchangeData.INR !== undefined) {
