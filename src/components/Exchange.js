@@ -6,17 +6,16 @@ import Areachart, { Areachart2 } from "./Areachart";
 import { data } from "./Data";
 import Error from "./Error";
 
-const Exchange = ({ formData, sessionData }) => {
+const Exchange = ({ formData, sessionData,setDataTimer }) => {
   const [state, setState] = React.useState({
     loading: false,
     exchangeData: {},
     errorMessage: null,
   });
 
-  React.useEffect(() => {
 
-    //fetching data every n minutes
-    
+   
+  React.useEffect(() => {
     const fetchData = async () => {
       try {
         setState((s) => {
@@ -36,6 +35,7 @@ const Exchange = ({ formData, sessionData }) => {
         });
         sessionStorage.setItem("exchangeData", JSON.stringify(result));
         sessionStorage.setItem("name", formData.name);
+        
       } catch (error) {
         console.log(error);
         setState((s) => {
@@ -47,54 +47,32 @@ const Exchange = ({ formData, sessionData }) => {
       }
     };
     if (sessionData) {
-      setState((s) => {
-        return {
-          ...s,
-          exchangeData: JSON.parse(sessionData),
-        };
-      });
-    } else {
-      fetchData();
-    }
-  }, [formData, sessionData]);
-
-  React.useEffect(() => {
-    const timerFetch = setInterval(() => {
-      const fetchData = async () => {
-        try {
           setState((s) => {
             return {
               ...s,
-              loading: true,
+              exchangeData: JSON.parse(sessionData),
             };
           });
-          const response = await ExchangeService.getExchangeData();
-          const result = response.data.rates;
-          setState((s) => {
-            return {
-              ...s,
-              loading: false,
-              exchangeData: result,
-            };
-          });
-          sessionStorage.setItem("exchangeData", JSON.stringify(result));
-          
-        } catch (error) {
-          console.log(error);
-          setState((s) => {
-            return {
-              ...s,
-              errorMessage: error.message,
-            };
-          });
+        } else {
+          fetchData();
         }
-      };
-      fetchData()
-    }, 60000);
+    //fetching data every 20second
+    const timerFetch = setInterval(() => {
+   
+      console.log('fetched');
+      setDataTimer((obj)=>{
+        return({
+          ...obj,
+          second:0,
+          minute:0
+        })
+      });
+      
+    }, 20000);
     return () => {
       clearInterval(timerFetch);
     };
-  },[])
+  },[formData,sessionData,setDataTimer])
 
 
   let selectedCountries, currentDate, historicalData;

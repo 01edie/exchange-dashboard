@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import Navbar from "./components/Navbar";
 import Form0 from "./components/Form0";
 import Features from "./components/Features";
@@ -6,12 +6,17 @@ import Exchange from "./components/Exchange";
 import UserPallete from "./components/UserPallete";
 
 const App = () => {
-  const [submitted, setSubmitted] = React.useState(false);
-  const [formData, setFormData] = React.useState({});
+  const [submitted, setSubmitted] = useState(false);
+  const [formData, setFormData] = useState({});
   const sessionData = sessionStorage.getItem("exchangeData");
-  const [sessionName, setSessionName] = React.useState(
+  const [sessionName, setSessionName] = useState(
     sessionStorage.getItem("name")
   );
+
+  const [dataTimer, setDataTimer] = React.useState({
+    second: 0,
+    minute: 0,
+  });
   return (
     <>
       <Navbar></Navbar>
@@ -24,6 +29,8 @@ const App = () => {
               sessionName={sessionName}
               setSubmitted={setSubmitted}
               setSessionName={setSessionName}
+              dataTimer={dataTimer}
+              setDataTimer={setDataTimer}
             />
           ) : (
             <Form0
@@ -34,7 +41,7 @@ const App = () => {
         </div>
         <div className="col-8 h-full feature-section">
           {submitted || sessionName ? (
-            <Exchange formData={formData} sessionData={sessionData}></Exchange>
+            <Exchange formData={formData} sessionData={sessionData} setDataTimer={setDataTimer}></Exchange>
           ) : (
             <Features></Features>
           )}
