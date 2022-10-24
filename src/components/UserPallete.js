@@ -60,7 +60,7 @@ const UserPallete = ({
         </p>
         <p className="ml-2">
           data refreshed{" "}
-          {(dataTimer.minute > 0)
+          {(dataTimer.minute >= 1)
             ? `${dataTimer.minute} minute ${dataTimer.second} second ago`:`${dataTimer.second} second ago`
           }
         </p>
