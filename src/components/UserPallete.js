@@ -9,6 +9,7 @@ const UserPallete = ({
   setSessionName,
   dataTimer,
   setDataTimer,
+  reloadStat,
 }) => {
   const [timer, setTimer] = React.useState({
     second: 0,
@@ -58,12 +59,21 @@ const UserPallete = ({
             ? `${timer.second} second ago`
             : `${timer.minute} minute ${timer.second} second ago`}
         </p>
-        <p className="ml-2">
-          data refreshed{" "}
-          {dataTimer.minute >= 1
-            ? `${dataTimer.minute} minute ${dataTimer.second} second ago`
-            : `${dataTimer.second} second ago`}
-        </p>
+
+        {reloadStat ? (
+          <p className="ml-2">
+            Data restored,
+            next data refresh in {20-dataTimer.second} second!
+          </p>
+        ) : (
+          <p className="ml-2">
+            data refreshed{" "}
+            {dataTimer.minute >= 1
+              ? `${dataTimer.minute} minute ${dataTimer.second} second ago`
+              : `${dataTimer.second} second ago`}
+          </p>
+        )}
+
         <Button
           label="Resubmit"
           onClick={() => {

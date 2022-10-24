@@ -5,15 +5,14 @@ import Barchart from "./Barchart";
 import Areachart, { Areachart2 } from "./Areachart";
 import { data } from "./Data";
 import Error from "./Error";
-import { Toast } from "primereact/toast";
 
-const Exchange = ({ formData, sessionData, setDataTimer }) => {
+const Exchange = ({ formData, sessionData, setDataTimer, toast,setReloadStat }) => {
   const [state, setState] = React.useState({
     loading: false,
     exchangeData: {},
     errorMessage: null,
   });
-  const toast = React.useRef();
+  
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -52,19 +51,23 @@ const Exchange = ({ formData, sessionData, setDataTimer }) => {
           exchangeData: JSON.parse(sessionData),
         };
       });
+      setReloadStat(true);
     } else {
       fetchData();
+      
+      
     }
+    
     //fetching data every 20second
     const timerFetch = setInterval(() => {
+      fetchData();
       console.log("fetched");
-
       toast.current.show({
         severity: "success",
         summary: "Success Message",
-        detail: "Data re-fetched",
+        detail: "Data Re-fetched",
       });
-
+      setReloadStat(false);
       setDataTimer((obj) => {
         return {
           ...obj,
@@ -72,11 +75,14 @@ const Exchange = ({ formData, sessionData, setDataTimer }) => {
           minute: 0,
         };
       });
+      
     }, 20000);
+
     return () => {
       clearInterval(timerFetch);
     };
-  }, [formData, sessionData, setDataTimer]);
+    
+  }, [formData, sessionData, setDataTimer,toast,setReloadStat]);
 
   let selectedCountries, currentDate, historicalData;
 
@@ -142,6 +148,7 @@ const Exchange = ({ formData, sessionData, setDataTimer }) => {
     return <Error errorMessage={state.errorMessage}></Error>;
   }
   return (
+    <>
     <div className="grid w-full mt-2 bg-black-alpha-10 p-3 justify-content-center">
       <Barchart
         chartData={selectedCountries}
@@ -164,8 +171,9 @@ const Exchange = ({ formData, sessionData, setDataTimer }) => {
         title={"INR vs. JPY respect to USD"}
       ></Areachart2>
 
-      <Toast ref={toast} />
+      
     </div>
+    </>
   );
 };
 
