@@ -32,7 +32,7 @@ const UserPallete = ({
   };
   if (sessionName) {
     return (
-      <Card className="shadow-4 bg-indigo-200 ml-2 mt-2">
+      <Card className="shadow-4 bg-indigo-200 mt-2">
         <h2> Welcome back! {sessionName}</h2>
         <p className="ml-2">
           window refreshed{" "}
@@ -54,7 +54,7 @@ const UserPallete = ({
     );
   }
   return (
-    <Card className="shadow-4 bg-indigo-200 ml-2 mt-2">
+    <Card className="shadow-4 bg-indigo-200 mt-2">
       <h2> Welcome, {formData.name}</h2>
       <p className="ml-2">
         submitted{" "}
