@@ -5,16 +5,16 @@ import Barchart from "./Barchart";
 import Areachart, { Areachart2 } from "./Areachart";
 import { data } from "./Data";
 import Error from "./Error";
+import { Toast } from "primereact/toast";
 
-const Exchange = ({ formData, sessionData,setDataTimer }) => {
+const Exchange = ({ formData, sessionData, setDataTimer }) => {
   const [state, setState] = React.useState({
     loading: false,
     exchangeData: {},
     errorMessage: null,
   });
+  const toast = React.useRef();
 
-
-   
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -35,7 +35,6 @@ const Exchange = ({ formData, sessionData,setDataTimer }) => {
         });
         sessionStorage.setItem("exchangeData", JSON.stringify(result));
         sessionStorage.setItem("name", formData.name);
-        
       } catch (error) {
         console.log(error);
         setState((s) => {
@@ -47,33 +46,37 @@ const Exchange = ({ formData, sessionData,setDataTimer }) => {
       }
     };
     if (sessionData) {
-          setState((s) => {
-            return {
-              ...s,
-              exchangeData: JSON.parse(sessionData),
-            };
-          });
-        } else {
-          fetchData();
-        }
+      setState((s) => {
+        return {
+          ...s,
+          exchangeData: JSON.parse(sessionData),
+        };
+      });
+    } else {
+      fetchData();
+    }
     //fetching data every 20second
     const timerFetch = setInterval(() => {
-   
-      console.log('fetched');
-      setDataTimer((obj)=>{
-        return({
-          ...obj,
-          second:0,
-          minute:0
-        })
+      console.log("fetched");
+
+      toast.current.show({
+        severity: "success",
+        summary: "Success Message",
+        detail: "Data re-fetched",
       });
-      
+
+      setDataTimer((obj) => {
+        return {
+          ...obj,
+          second: 0,
+          minute: 0,
+        };
+      });
     }, 20000);
     return () => {
       clearInterval(timerFetch);
     };
-  },[formData,sessionData,setDataTimer])
-
+  }, [formData, sessionData, setDataTimer]);
 
   let selectedCountries, currentDate, historicalData;
 
@@ -160,6 +163,8 @@ const Exchange = ({ formData, sessionData,setDataTimer }) => {
         data={historicalData}
         title={"INR vs. JPY respect to USD"}
       ></Areachart2>
+
+      <Toast ref={toast} />
     </div>
   );
 };
